@@ -303,7 +303,7 @@ namespace HeneGames.Airplane
             }
             else
             {
-                OnGroundInputHandle();
+               // OnGroundInputHandle(); ground control to major tom
             }
         }
 

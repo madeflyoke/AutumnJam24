@@ -1446,7 +1446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d236260ee0d659a4383b8680de7ec2ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  airplaneState: 1
+  airplaneState: 0
   _crowAnimator: {fileID: 8928528635635866507}
   _cam: {fileID: 5900367346233316371}
   trailThickness: 0.045
