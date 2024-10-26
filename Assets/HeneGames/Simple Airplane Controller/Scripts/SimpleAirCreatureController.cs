@@ -260,7 +260,7 @@ namespace HeneGames.Airplane
 
                 //Effects
                 ChangeWingTrailEffectThickness(trailThickness);
-                
+                _crowAnimator.SetGlideAnimation();
             }
             else
             {
@@ -273,7 +273,8 @@ namespace HeneGames.Airplane
 
                 //Effects
                 ChangeWingTrailEffectThickness(0f);
-                
+                _crowAnimator.SetFlyAnimation();
+
             }
         }
 
@@ -335,7 +336,7 @@ namespace HeneGames.Airplane
 
         private void TakeoffUpdate()
         {
-            _crowAnimator.SetTakeOffAnimation();
+            _crowAnimator.SetFlyAnimation();
     
             // Reset colliders
             foreach (SimpleAirPlaneCollider _airPlaneCollider in airPlaneColliders)

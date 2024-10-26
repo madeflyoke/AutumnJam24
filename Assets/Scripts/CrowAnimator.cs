@@ -4,24 +4,62 @@ using UnityEngine;
 
 public class CrowAnimator : MonoBehaviour
 {
+    private enum AnimationName
+    {
+        None= 0,
+        Idle =1,
+        Fly=2,
+        Walk=3,
+        Glide =4
+    }
+    
     private const string Idle = "IdleLookAround";
     private const string Fly = "Fly";
     private const string Walk = "Walk";
-    
+    private const string Glide = "Glide";
+
     [SerializeField] private Animator _animator;
-    
+    private AnimationName _currentAnimation;
+
     public void SetIdleAnimation()
     {
-       _animator.CrossFadeInFixedTime(Idle, .25f);
+        if (CheckupAnimationState(AnimationName.Idle))
+        {
+            _animator.CrossFadeInFixedTime(Idle, .25f);
+        }
     }
 
-    public void SetTakeOffAnimation()
+    public void SetFlyAnimation()
     {
-        _animator.CrossFadeInFixedTime(Fly, .25f);
+        if (CheckupAnimationState(AnimationName.Fly))
+        {
+            _animator.CrossFadeInFixedTime(Fly, .25f);
+        }
     }
     
     public void SetWalkAnimation()
     {
-        _animator.CrossFadeInFixedTime(Walk, .25f);
+        if (CheckupAnimationState(AnimationName.Walk))
+        {
+            _animator.CrossFadeInFixedTime(Walk, .25f);
+        }
+    }
+
+    public void SetGlideAnimation()
+    {
+        if (CheckupAnimationState(AnimationName.Glide))
+        {
+            _animator.CrossFadeInFixedTime(Glide, .25f);
+        }
+    }
+
+    private bool CheckupAnimationState(AnimationName animationName)
+    {
+        if (_currentAnimation==animationName)
+        {
+            return false;
+        }
+        _currentAnimation = animationName;
+        return true;
     }
 }
