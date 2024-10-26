@@ -90,7 +90,7 @@ Material:
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
     - _Cull: 2
-    - _Cutoff: 0.211
+    - _Cutoff: 0.077
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
@@ -113,8 +113,8 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.87169814, g: 0.87169814, b: 0.87169814, a: 1}
-    - _Color: {r: 0.87169814, g: 0.87169814, b: 0.87169814, a: 1}
+    - _BaseColor: {r: 0.7207546, g: 0.7207546, b: 0.7207546, a: 1}
+    - _Color: {r: 0.7207546, g: 0.7207546, b: 0.7207546, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.0735294, g: 0.0735294, b: 0.0735294, a: 0.154}
   m_BuildTextureStacks: []
