@@ -6,5 +6,6 @@ namespace Main.Scripts.Audio
         NORMALMUSIC = 1,
         HARDMUSIC = 2,
         WINGFLAP = 3,
+        RINGTOUCH = 4,
     }
 }

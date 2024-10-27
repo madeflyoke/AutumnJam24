@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using EasyButtons;
+using Main.Scripts.Audio;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -30,11 +31,11 @@ public class PathController : MonoBehaviour
     {
         if (_checkpoints.IndexOf(checkpoint)==_checkpoints.Count-1)
         {
-            Debug.LogWarning("finish");
-            
             FindObjectOfType<GameplayCanvas>().ShowFinalText(NpcPathFollower.s_FinishedCount==0, 
                 NpcPathFollower.s_FinishedCount+1);
         }
+        
+        AudioController.Instance.PlayClip(SoundType.RINGTOUCH, 0.2f);
         
         var index = _checkpoints.IndexOf(checkpoint)+1;
         if (index<_checkpoints.Count)
