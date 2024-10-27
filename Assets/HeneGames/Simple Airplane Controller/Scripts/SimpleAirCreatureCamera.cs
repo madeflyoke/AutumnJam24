@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,8 +40,12 @@ namespace HeneGames.Airplane
 
         private void Update()
         {
+            Cursor.visible = false;
+            
+            freeLook.enabled = Application.isFocused;
             CameraFovUpdate();
         }
+
 
         private void CameraFovUpdate()
         {

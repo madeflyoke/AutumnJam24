@@ -23,7 +23,7 @@ namespace HeneGames.Airplane
 
         private float maxSpeed = 0.6f;
         private float speedMultiplier;
-        private float currentYawSpeed;
+      //  private float currentYawSpeed;
         private float currentPitchSpeed;
         private float currentRollSpeed;
         private float currentSpeed;
@@ -37,8 +37,9 @@ namespace HeneGames.Airplane
         private float inputH;
         private float inputV;
         private bool inputTurbo;
-        private bool inputYawLeft;
-        private bool inputYawRight;
+        private bool inputSlower;
+        // private bool inputYawLeft;
+        // private bool inputYawRight;
 
         private bool _landed;
 
@@ -54,9 +55,9 @@ namespace HeneGames.Airplane
         [SerializeField] private float trailThickness = 0.045f;
         [SerializeField] private TrailRenderer[] wingTrailEffects;
 
-        [Header("Rotating speeds")]
-        [Range(5f, 500f)]
-        [SerializeField] private float yawSpeed = 50f;
+        // [Header("Rotating speeds")]
+        // [Range(5f, 500f)]
+        // [SerializeField] private float yawSpeed = 50f;
 
         [Range(5f, 500f)]
         [SerializeField] private float pitchSpeed = 100f;
@@ -64,9 +65,9 @@ namespace HeneGames.Airplane
         [Range(5f, 500f)]
         [SerializeField] private float rollSpeed = 200f;
 
-        [Header("Rotating speeds multiplers when turbo is used")]
-        [Range(0.1f, 5f)]
-        [SerializeField] private float yawTurboMultiplier = 0.3f;
+        // [Header("Rotating speeds multiplers when turbo is used")]
+        // [Range(0.1f, 5f)]
+        // [SerializeField] private float yawTurboMultiplier = 0.3f;
 
         [Range(0.1f, 5f)]
         [SerializeField] private float pitchTurboMultiplier = 0.5f;
@@ -116,11 +117,8 @@ namespace HeneGames.Airplane
 
             //Get and set rigidbody
             rb = GetComponent<Rigidbody>();
-            rb.isKinematic = true;
-            rb.useGravity = false;
-            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
 
-            SetupColliders(crashCollidersRoot);
+//            SetupColliders(crashCollidersRoot);
         }
 
         private void Update()
@@ -128,20 +126,25 @@ namespace HeneGames.Airplane
             AudioSystem();
             HandleInputs();
 
-            switch (airplaneState)
-            {
-                case AirplaneState.Flying:
-                    FlyingUpdate();
-                    break;
+            // switch (airplaneState)
+            // {
+            //     case AirplaneState.Flying:
+            //         FlyingUpdate();
+            //         break;
+            //
+            //     case AirplaneState.Landing:
+            //         LandingUpdate();
+            //         break;
+            //
+            //     case AirplaneState.Takeoff:
+            //         TakeoffUpdate();
+            //         break;
+            // }
+        }
 
-                case AirplaneState.Landing:
-                    LandingUpdate();
-                    break;
-
-                case AirplaneState.Takeoff:
-                    TakeoffUpdate();
-                    break;
-            }
+        private void FixedUpdate()
+        {
+            FlyingUpdate();
         }
 
         #region Flying State
@@ -153,6 +156,7 @@ namespace HeneGames.Airplane
             {
                 Movement();
                 SidewaysForceCalculation();
+                rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
             }
             else
             {
@@ -160,10 +164,10 @@ namespace HeneGames.Airplane
             }
 
             //Crash
-            if (HitSometing())
-            {
-                Crash();
-            }
+            // if (HitSometing())
+            // {
+            //     Crash();
+            // }
         }
 
         private void SidewaysForceCalculation()
@@ -181,8 +185,8 @@ namespace HeneGames.Airplane
 
                 transform.Rotate(Vector3.up * (_invert * _mutiplierYRot) * Time.deltaTime);
                 transform.Rotate(Vector3.right * (-_invert * _mutiplierXRot) * currentPitchSpeed * Time.deltaTime);
-
-                transform.Translate(transform.up * (_invert * _mutiplierYPos) * Time.deltaTime);
+                
+                rb.velocity += transform.up * (_invert * _mutiplierYPos);
             }
 
             //Left side
@@ -193,7 +197,7 @@ namespace HeneGames.Airplane
                 transform.Rotate(-Vector3.up * (_angle * _mutiplierYRot) * Time.deltaTime);
                 transform.Rotate(Vector3.right * (-_angle * _mutiplierXRot) * currentPitchSpeed * Time.deltaTime);
 
-                transform.Translate(transform.up * (_angle * _mutiplierYPos) * Time.deltaTime);
+                rb.velocity += transform.up * (_angle * _mutiplierYPos);
             }
 
             //Right side down
@@ -202,7 +206,7 @@ namespace HeneGames.Airplane
                 float _angle = (transform.localEulerAngles.z - 90f) / (180f - 90f);
                 float _invert = 1f - _angle;
 
-                transform.Translate(transform.up * (_invert * _mutiplierYPos) * Time.deltaTime);
+                rb.velocity += transform.up * (_invert * _mutiplierYPos);
                 transform.Rotate(Vector3.right * (-_invert * _mutiplierXRot) * currentPitchSpeed * Time.deltaTime);
             }
 
@@ -211,15 +215,15 @@ namespace HeneGames.Airplane
             {
                 float _angle = (transform.localEulerAngles.z - 180f) / (270f - 180f);
 
-                transform.Translate(transform.up * (_angle * _mutiplierYPos) * Time.deltaTime);
+                rb.velocity += transform.up * (_angle * _mutiplierYPos);
                 transform.Rotate(Vector3.right * (-_angle * _mutiplierXRot) * currentPitchSpeed * Time.deltaTime);
             }
         }
 
         private void Movement()
         {
-            //Move forward
-            transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
+            // Move the Rigidbody using MovePosition
+            rb.velocity += transform.forward * currentSpeed;
 
             //Store last speed
             lastEngineSpeed = currentSpeed;
@@ -228,15 +232,15 @@ namespace HeneGames.Airplane
             transform.Rotate(Vector3.forward * -inputH * currentRollSpeed * Time.deltaTime);
             transform.Rotate(Vector3.right * inputV * currentPitchSpeed * Time.deltaTime);
 
-            //Rotate yaw
-            if (inputYawRight)
-            {
-                transform.Rotate(Vector3.up * currentYawSpeed * Time.deltaTime);
-            }
-            else if (inputYawLeft)
-            {
-                transform.Rotate(-Vector3.up * currentYawSpeed * Time.deltaTime);
-            }
+            // //Rotate yaw
+            // if (inputYawRight)
+            // {
+            //     transform.Rotate(Vector3.up * currentYawSpeed * Time.deltaTime);
+            // }
+            // else if (inputYawLeft)
+            // {
+            //     transform.Rotate(-Vector3.up * currentYawSpeed * Time.deltaTime);
+            // }
 
             //Accelerate and deacclerate
             if (currentSpeed < maxSpeed)
@@ -254,7 +258,7 @@ namespace HeneGames.Airplane
                 //Set speed to turbo speed and rotation to turbo values
                 maxSpeed = turboSpeed;
 
-                currentYawSpeed = yawSpeed * yawTurboMultiplier;
+               // currentYawSpeed = yawSpeed * yawTurboMultiplier;
                 currentPitchSpeed = pitchSpeed * pitchTurboMultiplier;
                 currentRollSpeed = rollSpeed * rollTurboMultiplier;
 
@@ -264,10 +268,16 @@ namespace HeneGames.Airplane
             }
             else
             {
-                //Speed and rotation normal
-                maxSpeed = defaultSpeed * speedMultiplier;
+                if (inputSlower)
+                {
+                    maxSpeed = defaultSpeed/4f;
+                }
+                else
+                {
+                    maxSpeed = defaultSpeed * speedMultiplier;
+                }
 
-                currentYawSpeed = yawSpeed;
+             //   currentYawSpeed = yawSpeed;
                 currentPitchSpeed = pitchSpeed;
                 currentRollSpeed = rollSpeed;
 
@@ -415,8 +425,6 @@ namespace HeneGames.Airplane
 
                 //Add rigid body to it
                 Rigidbody _rb = _currentObject.AddComponent<Rigidbody>();
-                _rb.useGravity = false;
-                _rb.isKinematic = true;
                 _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
             }
         }
@@ -531,10 +539,10 @@ namespace HeneGames.Airplane
             //Rotate inputs
             inputH = Input.GetAxis("Horizontal");
             inputV = Input.GetAxis("Vertical");
-
+            inputSlower = Input.GetKey(KeyCode.Space);
             //Yaw axis inputs
-            inputYawLeft = Input.GetKey(KeyCode.Q);
-            inputYawRight = Input.GetKey(KeyCode.E);
+            // inputYawLeft = Input.GetKey(KeyCode.Q);
+            // inputYawRight = Input.GetKey(KeyCode.E);
 
             //Turbo
             inputTurbo = Input.GetKey(KeyCode.LeftShift);
