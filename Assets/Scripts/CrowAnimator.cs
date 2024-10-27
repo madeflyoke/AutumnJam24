@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Main.Scripts.Audio;
 using UnityEngine;
 
 public class CrowAnimator : MonoBehaviour
@@ -19,6 +20,7 @@ public class CrowAnimator : MonoBehaviour
     private const string Glide = "Glide";
 
     [SerializeField] private Animator _animator;
+    [SerializeField] private bool _player;
     private AnimationName _currentAnimation;
 
     public void SetIdleAnimation()
@@ -61,5 +63,13 @@ public class CrowAnimator : MonoBehaviour
         }
         _currentAnimation = animationName;
         return true;
+    }
+
+    public void WingFlap()
+    {
+        if (_player)
+        {
+            AudioController.Instance.PlayClip(SoundType.WINGFLAP, customPitch: Random.Range(0.9f, 1.1f), customVolume: 0.35f);
+        }
     }
 }

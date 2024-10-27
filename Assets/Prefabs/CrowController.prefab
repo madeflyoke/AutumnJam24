@@ -136,7 +136,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2170197031517260811}
-  - component: {fileID: 8928528635635866507}
   m_Layer: 6
   m_Name: CrowGeneral
   m_TagString: Untagged
@@ -163,19 +162,6 @@ Transform:
   - {fileID: 5257087690315902873}
   m_Father: {fileID: 1995043734184462033}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8928528635635866507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2647383744045851002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90fecbe37b877a24dbbc15668b5a1dee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animator: {fileID: 8271877125984735954}
 --- !u!1 &3492511443232654556
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,7 +530,7 @@ MonoBehaviour:
   airCreatureController: {fileID: 1135738757260504232}
   freeLook: {fileID: 5957197844469635086}
   cameraDefaultFov: 50
-  cameraTurboFov: 55
+  cameraHardDefaultFov: 60
 --- !u!20 &666718370837094470
 Camera:
   m_ObjectHideFlags: 0
@@ -1447,7 +1433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   airplaneState: 0
-  _crowAnimator: {fileID: 8928528635635866507}
+  _crowAnimator: {fileID: 3135941409204259920}
   _cam: {fileID: 5900367346233316371}
   trailThickness: 0.045
   wingTrailEffects:
@@ -2583,6 +2569,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2018177891594550719, guid: 33c57a54ee9e06040b3330cf40da2a1e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3135941409204259920}
     - targetCorrespondingSourceObject: {fileID: 2660674089073292796, guid: 33c57a54ee9e06040b3330cf40da2a1e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2649679876018758323}
@@ -2615,6 +2604,25 @@ CapsuleCollider:
   m_Height: 0.07999999
   m_Direction: 0
   m_Center: {x: 4.739872e-10, y: 0.0036877878, z: -2.6498442e-10}
+--- !u!1 &3161230430699387281 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2018177891594550719, guid: 33c57a54ee9e06040b3330cf40da2a1e, type: 3}
+  m_PrefabInstance: {fileID: 4025356369341695022}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3135941409204259920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3161230430699387281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90fecbe37b877a24dbbc15668b5a1dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 8271877125984735954}
+  _player: 1
 --- !u!4 &5257087690315902873 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9162605520034229175, guid: 33c57a54ee9e06040b3330cf40da2a1e, type: 3}

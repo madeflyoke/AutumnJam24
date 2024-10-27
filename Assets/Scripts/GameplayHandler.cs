@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using HeneGames.Airplane;
+using Main.Scripts.Audio;
 using UnityEngine;
 
 public class GameplayHandler : MonoBehaviour
@@ -25,10 +26,13 @@ public class GameplayHandler : MonoBehaviour
             return;
         }
         Instance = this;
+        DontDestroyOnLoad(this);
     }
 
     private void Start()
     {
+        AudioController.Instance.PlayClipAsMusic(_Difficulty==0? SoundType.NORMALMUSIC: SoundType.HARDMUSIC);
+        
         _enemies.ForEach(x =>
         {
             x.Initialize();
