@@ -1453,12 +1453,14 @@ MonoBehaviour:
   wingTrailEffects:
   - {fileID: 2673674124431286178}
   - {fileID: 3072173931840346902}
+  yawSpeed: 50
   pitchSpeed: 100
   rollSpeed: 200
+  yawTurboMultiplier: 0.3
   pitchTurboMultiplier: 0.48
   rollTurboMultiplier: 0.6
   defaultSpeed: 17
-  turboSpeed: 35
+  turboSpeed: 25
   accelerating: 10
   deaccelerating: 5
   sidewaysMovement: 0.1

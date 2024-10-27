@@ -23,7 +23,7 @@ namespace HeneGames.Airplane
 
         private float maxSpeed = 0.6f;
         private float speedMultiplier;
-      //  private float currentYawSpeed;
+        private float currentYawSpeed;
         private float currentPitchSpeed;
         private float currentRollSpeed;
         private float currentSpeed;
@@ -38,8 +38,8 @@ namespace HeneGames.Airplane
         private float inputV;
         private bool inputTurbo;
         private bool inputSlower;
-        // private bool inputYawLeft;
-        // private bool inputYawRight;
+        private bool inputYawLeft;
+        private bool inputYawRight;
 
         private bool _landed;
 
@@ -55,9 +55,9 @@ namespace HeneGames.Airplane
         [SerializeField] private float trailThickness = 0.045f;
         [SerializeField] private TrailRenderer[] wingTrailEffects;
 
-        // [Header("Rotating speeds")]
-        // [Range(5f, 500f)]
-        // [SerializeField] private float yawSpeed = 50f;
+        [Header("Rotating speeds")]
+        [Range(5f, 500f)]
+        [SerializeField] private float yawSpeed = 50f;
 
         [Range(5f, 500f)]
         [SerializeField] private float pitchSpeed = 100f;
@@ -65,9 +65,9 @@ namespace HeneGames.Airplane
         [Range(5f, 500f)]
         [SerializeField] private float rollSpeed = 200f;
 
-        // [Header("Rotating speeds multiplers when turbo is used")]
-        // [Range(0.1f, 5f)]
-        // [SerializeField] private float yawTurboMultiplier = 0.3f;
+        [Header("Rotating speeds multiplers when turbo is used")]
+        [Range(0.1f, 5f)]
+        [SerializeField] private float yawTurboMultiplier = 0.3f;
 
         [Range(0.1f, 5f)]
         [SerializeField] private float pitchTurboMultiplier = 0.5f;
@@ -232,15 +232,15 @@ namespace HeneGames.Airplane
             transform.Rotate(Vector3.forward * -inputH * currentRollSpeed * Time.deltaTime);
             transform.Rotate(Vector3.right * inputV * currentPitchSpeed * Time.deltaTime);
 
-            // //Rotate yaw
-            // if (inputYawRight)
-            // {
-            //     transform.Rotate(Vector3.up * currentYawSpeed * Time.deltaTime);
-            // }
-            // else if (inputYawLeft)
-            // {
-            //     transform.Rotate(-Vector3.up * currentYawSpeed * Time.deltaTime);
-            // }
+            //Rotate yaw
+            if (inputYawRight)
+            {
+                transform.Rotate(Vector3.up * currentYawSpeed * Time.deltaTime);
+            }
+            else if (inputYawLeft)
+            {
+                transform.Rotate(-Vector3.up * currentYawSpeed * Time.deltaTime);
+            }
 
             //Accelerate and deacclerate
             if (currentSpeed < maxSpeed)
@@ -258,7 +258,7 @@ namespace HeneGames.Airplane
                 //Set speed to turbo speed and rotation to turbo values
                 maxSpeed = turboSpeed;
 
-               // currentYawSpeed = yawSpeed * yawTurboMultiplier;
+                currentYawSpeed = yawSpeed * yawTurboMultiplier;
                 currentPitchSpeed = pitchSpeed * pitchTurboMultiplier;
                 currentRollSpeed = rollSpeed * rollTurboMultiplier;
 
@@ -277,7 +277,7 @@ namespace HeneGames.Airplane
                     maxSpeed = defaultSpeed * speedMultiplier;
                 }
 
-             //   currentYawSpeed = yawSpeed;
+                currentYawSpeed = yawSpeed;
                 currentPitchSpeed = pitchSpeed;
                 currentRollSpeed = rollSpeed;
 
@@ -537,13 +537,23 @@ namespace HeneGames.Airplane
         private void HandleInputs()
         {
             //Rotate inputs
-            inputH = Input.GetAxis("Horizontal");
+           
             inputV = Input.GetAxis("Vertical");
             inputSlower = Input.GetKey(KeyCode.Space);
-            //Yaw axis inputs
-            // inputYawLeft = Input.GetKey(KeyCode.Q);
-            // inputYawRight = Input.GetKey(KeyCode.E);
 
+            if (GameplayHandler.Instance._Difficulty==0)
+            {
+                inputH = 0;
+                inputYawLeft = Input.GetKey(KeyCode.A);
+                inputYawRight = Input.GetKey(KeyCode.D);
+            }
+            else
+            {
+                inputH = Input.GetAxis("Horizontal");
+                inputYawLeft =false;
+                inputYawRight = false;
+            }
+            
             //Turbo
             inputTurbo = Input.GetKey(KeyCode.LeftShift);
         }

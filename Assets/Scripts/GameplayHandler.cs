@@ -5,8 +5,15 @@ using UnityEngine;
 
 public class GameplayHandler : MonoBehaviour
 {
-    public static GameplayHandler Instance { get; private set; }
+    public enum Difficulty
+    {
+        Normal =0,
+        Hard = 1,
+    }
     
+    public static GameplayHandler Instance { get; private set; }
+
+    [field: SerializeField] public Difficulty _Difficulty { get; private set; } = 0;
     [field:SerializeField] public SimpleAirCreatureController Player { get; private set; }
     [SerializeField] private List<NpcPathFollower> _enemies;
 

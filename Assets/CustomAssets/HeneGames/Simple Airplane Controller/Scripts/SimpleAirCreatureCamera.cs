@@ -16,8 +16,9 @@ namespace HeneGames.Airplane
         [SerializeField] private CinemachineFreeLook freeLook;
 
         [Header("Camera values")]
-        [SerializeField] private float cameraDefaultFov = 60f;
-        [SerializeField] private float cameraTurboFov = 40f;
+        [SerializeField] private float cameraDefaultFov = 50f;
+        [SerializeField] private float cameraHardDefaultFov = 60f;
+        private float cameraTurboFov;
         
         private void OnEnable()
         {
@@ -33,6 +34,18 @@ namespace HeneGames.Airplane
         {
             brain = GetComponent<CinemachineBrain>();
 
+            if (GameplayHandler.Instance._Difficulty==0)
+            {
+                freeLook.m_BindingMode = CinemachineTransposer.BindingMode.WorldSpace;
+            }
+            else
+            {
+                freeLook.m_BindingMode = CinemachineTransposer.BindingMode.LockToTarget;
+                cameraDefaultFov = cameraHardDefaultFov;
+            }
+
+            cameraTurboFov = cameraDefaultFov + 10f;
+            
             //Lock and hide mouse
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
