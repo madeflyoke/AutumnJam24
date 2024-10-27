@@ -69,12 +69,12 @@ public class NpcPathFollower : MonoBehaviour
         
         _concretePath = _path.Splines[0].Knots.Select(
             x => (Vector3)x.Position+_path.transform.position + RandomVector(7f)).ToArray();
+        transform.position = _concretePath[0];
+        transform.forward = _concretePath[1] - transform.position;
     }
     
     public void FollowPath()
     {
-        transform.position = _concretePath[0];
-        transform.forward = _concretePath[1] - transform.position;
         _crowAnimator.SetFlyAnimation();
         _tween=transform.DOPath(_concretePath, _speed)
             .SetOptions(false,lockRotation: AxisConstraint.X)
@@ -89,19 +89,14 @@ public class NpcPathFollower : MonoBehaviour
         _currentPathIndex = index;
         if (_currentPathIndex<(int)(_concretePath.Length*0.3f))
         {
-            Debug.LogWarning("SetStartSpeed");
             SetSpeed(_speedModes.StartSpeedMultiplier);
         }
         else if (_currentPathIndex<(int)(_concretePath.Length*0.6f))
         {
-            Debug.LogWarning("SetMidSpeed");
-
             SetSpeed(_speedModes.MidSpeedMultiplier);
         }
         else
         {
-            Debug.LogWarning("SetEndSpeed");
-
             SetSpeed(_speedModes.EndSpeedMultiplier);
         }
     }

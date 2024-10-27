@@ -34,7 +34,7 @@ namespace HeneGames.Airplane
         {
             brain = GetComponent<CinemachineBrain>();
 
-            if (GameplayHandler.Instance._Difficulty==0)
+            if (GameplayHandler._Difficulty==0)
             {
                 freeLook.m_BindingMode = CinemachineTransposer.BindingMode.WorldSpace;
             }

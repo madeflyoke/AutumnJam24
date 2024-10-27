@@ -108,6 +108,9 @@ namespace HeneGames.Airplane
         [Tooltip("How far must the plane be from the runway before it can be controlled again")]
         [SerializeField] private float takeoffLenght = 30f;
 
+        private bool _isInitialized;
+        
+        
         private void Start()
         {
             //Setup speeds
@@ -117,15 +120,22 @@ namespace HeneGames.Airplane
 
             //Get and set rigidbody
             rb = GetComponent<Rigidbody>();
-
 //            SetupColliders(crashCollidersRoot);
+        }
+
+        public void Initialize()
+        {
+            _isInitialized = true;
         }
 
         private void Update()
         {
-            AudioSystem();
-            HandleInputs();
-
+            if (_isInitialized)
+            {
+                HandleInputs();
+            }
+          //  AudioSystem();
+          
             // switch (airplaneState)
             // {
             //     case AirplaneState.Flying:
@@ -144,26 +154,28 @@ namespace HeneGames.Airplane
 
         private void FixedUpdate()
         {
-            FlyingUpdate();
+            if (_isInitialized)
+            {
+                FlyingUpdate();
+            }
         }
 
         #region Flying State
 
         private void FlyingUpdate()
         {
-            //Airplane move only if not dead
-            if (true)
-            {
-                Movement();
-                SidewaysForceCalculation();
-                rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
-            }
-            else
-            {
-                ChangeWingTrailEffectThickness(0f);
-            }
+            Movement();
+            SidewaysForceCalculation();
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
+            // if (true)
+            // {
+            //     
+            // }
+            // else
+            // {
+            //     ChangeWingTrailEffectThickness(0f);
+            // }
 
-            //Crash
             // if (HitSometing())
             // {
             //     Crash();
@@ -263,6 +275,14 @@ namespace HeneGames.Airplane
                 currentRollSpeed = rollSpeed * rollTurboMultiplier;
 
                 //Effects
+
+                if (wingTrailEffects[0].gameObject.activeSelf==false)
+                {
+                    foreach (var tr in wingTrailEffects)
+                    {
+                        tr.gameObject.SetActive(true);
+                    }
+                }
                 ChangeWingTrailEffectThickness(trailThickness);
                 _crowAnimator.SetGlideAnimation();
             }
@@ -541,7 +561,7 @@ namespace HeneGames.Airplane
             inputV = Input.GetAxis("Vertical");
             inputSlower = Input.GetKey(KeyCode.Space);
 
-            if (GameplayHandler.Instance._Difficulty==0)
+            if (GameplayHandler._Difficulty==0)
             {
                 inputH = 0;
                 inputYawLeft = Input.GetKey(KeyCode.A);

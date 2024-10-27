@@ -31,13 +31,7 @@ namespace Main.Scripts.Audio
             }
             Destroy(gameObject);
         }
-
-        private void Start()
-        {
-            _externalNoiseSource.loop = true;
-            _externalNoiseSource.Play();
-        }
-
+        
         public void PlayClipAsMusic(SoundType soundType)
         {
             var audioSource = _mainMusicSource;

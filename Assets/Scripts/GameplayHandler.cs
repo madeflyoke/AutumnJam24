@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using EasyButtons;
 using HeneGames.Airplane;
 using Main.Scripts.Audio;
 using UnityEngine;
@@ -13,10 +14,11 @@ public class GameplayHandler : MonoBehaviour
     }
     
     public static GameplayHandler Instance { get; private set; }
+    public static Difficulty _Difficulty { get; private set; } = 0;
 
-    [field: SerializeField] public Difficulty _Difficulty { get; private set; } = 0;
     [field:SerializeField] public SimpleAirCreatureController Player { get; private set; }
     [SerializeField] private List<NpcPathFollower> _enemies;
+    [SerializeField] private MainCanvas _mainCanvas;
 
     public void Awake()
     {
@@ -26,17 +28,35 @@ public class GameplayHandler : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(this);
     }
-
+    
     private void Start()
     {
+        _enemies.ForEach(x =>
+        {
+            x.Initialize();
+        });
+        _mainCanvas.OnCountdownEnd += Launch;
+        _mainCanvas.StartCountdown();
+    }
+
+    public static void SetDifficulty(Difficulty d)
+    {
+        _Difficulty = d;
+    }
+
+    [Button]
+    private void Launch()
+    {
+        _mainCanvas.OnCountdownEnd -= Launch;
+
         AudioController.Instance.PlayClipAsMusic(_Difficulty==0? SoundType.NORMALMUSIC: SoundType.HARDMUSIC);
         
         _enemies.ForEach(x =>
         {
-            x.Initialize();
             x.FollowPath();
         });
+        
+        Player.Initialize();
     }
 }
