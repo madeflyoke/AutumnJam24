@@ -18,7 +18,7 @@ public class GameplayHandler : MonoBehaviour
 
     [field:SerializeField] public SimpleAirCreatureController Player { get; private set; }
     [SerializeField] private List<NpcPathFollower> _enemies;
-    [SerializeField] private MainCanvas _mainCanvas;
+    [SerializeField] private GameplayCanvas gameplayCanvas;
 
     public void Awake()
     {
@@ -36,8 +36,8 @@ public class GameplayHandler : MonoBehaviour
         {
             x.Initialize();
         });
-        _mainCanvas.OnCountdownEnd += Launch;
-        _mainCanvas.StartCountdown();
+        gameplayCanvas.OnCountdownEnd += Launch;
+        gameplayCanvas.StartCountdown();
     }
 
     public static void SetDifficulty(Difficulty d)
@@ -48,7 +48,7 @@ public class GameplayHandler : MonoBehaviour
     [Button]
     private void Launch()
     {
-        _mainCanvas.OnCountdownEnd -= Launch;
+        gameplayCanvas.OnCountdownEnd -= Launch;
 
         AudioController.Instance.PlayClipAsMusic(_Difficulty==0? SoundType.NORMALMUSIC: SoundType.HARDMUSIC);
         

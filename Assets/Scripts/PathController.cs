@@ -28,6 +28,14 @@ public class PathController : MonoBehaviour
 
     private void OnCheckpointEntered(Checkpoint checkpoint)
     {
+        if (_checkpoints.IndexOf(checkpoint)==_checkpoints.Count-1)
+        {
+            Debug.LogWarning("finish");
+            
+            FindObjectOfType<GameplayCanvas>().ShowFinalText(NpcPathFollower.s_FinishedCount==0, 
+                NpcPathFollower.s_FinishedCount+1);
+        }
+        
         var index = _checkpoints.IndexOf(checkpoint)+1;
         if (index<_checkpoints.Count)
         {

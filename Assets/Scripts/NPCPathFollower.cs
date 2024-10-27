@@ -18,6 +18,7 @@ public class NpcPathFollower : MonoBehaviour
     }
     
     public Color MarkerColor { get; private set; }
+    public static int s_FinishedCount { get; private set; }
     
     [SerializeField] private SplineContainer _path;
     [SerializeField] private float _speed;
@@ -81,7 +82,8 @@ public class NpcPathFollower : MonoBehaviour
             .OnWaypointChange(OnWaypointChanged)
             .SetSpeedBased(true)
             .SetEase(Ease.Linear)
-            .SetLookAt(0.01f, up:Vector3.up);
+            .SetLookAt(0.01f, up:Vector3.up)
+            .OnComplete(()=>s_FinishedCount++);
     }
 
     private void OnWaypointChanged(int index)
@@ -131,5 +133,6 @@ public class NpcPathFollower : MonoBehaviour
     private void OnDisable()
     {
         _tween?.Kill();
+        s_FinishedCount = 0;
     }
 }

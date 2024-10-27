@@ -7,7 +7,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainCanvas : MonoBehaviour
+public class GameplayCanvas : MonoBehaviour
 {
     public event Action OnCountdownEnd;
     
@@ -16,6 +16,7 @@ public class MainCanvas : MonoBehaviour
     [SerializeField] private TMP_Text _countdownText;
     [SerializeField] private GameObject _pauseMenu;
     [SerializeField] private Button _pauseMenuButtonToMenu;
+    [SerializeField] private TMP_Text _finalText;
     private int _currentCount;
     
     private void Start()
@@ -28,6 +29,7 @@ public class MainCanvas : MonoBehaviour
             Pause(false);
             GameStateChanger.Instance.CallOnMainMenu();
         });
+        _finalText.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -47,6 +49,19 @@ public class MainCanvas : MonoBehaviour
         }
     }
 
+    public void ShowFinalText(bool winner, int place)
+    {
+        if (winner)
+        {
+            _finalText.text = "You Win! Congratulations!";
+        }
+        else
+        {
+            _finalText.text = $"{place}th Place! Well Done!";
+        }
+        _finalText.gameObject.SetActive(true);
+    }
+    
     private void Pause(bool value)
     {
         if (value)
