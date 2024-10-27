@@ -9,20 +9,47 @@ using Random = UnityEngine.Random;
 
 public class NpcPathFollower : MonoBehaviour
 {
+
+    public struct SpeedModes
+    {
+        public float StartSpeedMultiplier;
+        public float MidSpeedMultiplier;
+        public float EndSpeedMultiplier;
+    }
+    
+    public Color MarkerColor { get; private set; }
+    
     [SerializeField] private SplineContainer _path;
     [SerializeField] private float _speed;
     [SerializeField] private CrowAnimator _crowAnimator;
     [SerializeField] private float _playerDistanceThreshold;
+    [SerializeField] private List<MeshRenderer> _markersRenderers;
     private Tween _tween;
     private SimpleAirCreatureController _player;
+    private float _currentSpeed;
+    private SpeedModes _speedModes;
+    private int _currentPathIndex;
+    private Vector3[] _concretePath;
 
-    private void Start()
+    public void Initialize()
     {
+        MarkerColor = new Color(Random.value, Random.value, Random.value);
+        
+        _markersRenderers.ForEach(x=>x.material.color = MarkerColor * 2f);
         _player = GameplayHandler.Instance.Player;
-        FollowPath();
+        SetupPath();
+        SetupSpeedModes();
     }
 
-    public void FollowPath()
+    private void SetupSpeedModes()
+    {
+        _speedModes = new SpeedModes();
+        _speedModes.StartSpeedMultiplier = Random.Range(0.8f, 1.2f);
+        _speedModes.MidSpeedMultiplier = Random.Range(0.7f, 0.9f);
+        _speedModes.EndSpeedMultiplier = Random.Range(0.7f, 1.1f);
+    }
+
+    private void SetupPath()
     {
         Vector3 RandomVector(float range)
         {
@@ -40,14 +67,43 @@ public class NpcPathFollower : MonoBehaviour
                 GenerateRandomValue(range));
         }
         
-        var path = _path.Splines[0].Knots.Select(
+        _concretePath = _path.Splines[0].Knots.Select(
             x => (Vector3)x.Position+_path.transform.position + RandomVector(7f)).ToArray();
-        
-        transform.position = path[0];
-        transform.forward = path[1] - transform.position;
+    }
+    
+    public void FollowPath()
+    {
+        transform.position = _concretePath[0];
+        transform.forward = _concretePath[1] - transform.position;
         _crowAnimator.SetFlyAnimation();
-        _tween=transform.DOPath(path, _speed).SetOptions(false,lockRotation: AxisConstraint.X)
-            .SetSpeedBased(true).SetEase(Ease.Linear).SetLookAt(0.01f, up:Vector3.up);
+        _tween=transform.DOPath(_concretePath, _speed)
+            .SetOptions(false,lockRotation: AxisConstraint.X)
+            .OnWaypointChange(OnWaypointChanged)
+            .SetSpeedBased(true)
+            .SetEase(Ease.Linear)
+            .SetLookAt(0.01f, up:Vector3.up);
+    }
+
+    private void OnWaypointChanged(int index)
+    {
+        _currentPathIndex = index;
+        if (_currentPathIndex<(int)(_concretePath.Length*0.3f))
+        {
+            Debug.LogWarning("SetStartSpeed");
+            SetSpeed(_speedModes.StartSpeedMultiplier);
+        }
+        else if (_currentPathIndex<(int)(_concretePath.Length*0.6f))
+        {
+            Debug.LogWarning("SetMidSpeed");
+
+            SetSpeed(_speedModes.MidSpeedMultiplier);
+        }
+        else
+        {
+            Debug.LogWarning("SetEndSpeed");
+
+            SetSpeed(_speedModes.EndSpeedMultiplier);
+        }
     }
 
     private void Update() //Path along Z axis
