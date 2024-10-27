@@ -31,6 +31,11 @@ namespace Main.Scripts.Audio
             }
             Destroy(gameObject);
         }
+
+        public void StopMainMusic()
+        {
+            _mainMusicSource.Stop();
+        }
         
         public void PlayClipAsMusic(SoundType soundType)
         {

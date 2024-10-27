@@ -31,6 +31,11 @@ public class GameStateChanger : MonoBehaviour
         GameplayStarted?.Invoke();
     }
 
+    public void CallOnMainMenu()
+    {
+        SceneManager.LoadSceneAsync(0);
+    }
+
     private void OnDestroy()
     {
         _cts?.Cancel();

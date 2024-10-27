@@ -53,7 +53,7 @@ namespace HeneGames.Airplane
 
         private void Update()
         {
-            Cursor.visible = false;
+         //   Cursor.visible = false;
             
             freeLook.enabled = Application.isFocused;
             CameraFovUpdate();

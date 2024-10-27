@@ -127,4 +127,9 @@ public class NpcPathFollower : MonoBehaviour
     {
         _tween.timeScale = multiplier;
     }
+
+    private void OnDisable()
+    {
+        _tween?.Kill();
+    }
 }

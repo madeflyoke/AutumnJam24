@@ -1,3 +1,5 @@
+using System;
+using Main.Scripts.Audio;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +21,14 @@ public class MainMenuCanvas : MonoBehaviour
         });
         _normalModeButton.onClick.AddListener(()=>OnModeSelected(GameplayHandler.Difficulty.Normal));
         _hardModeButton.onClick.AddListener(()=>OnModeSelected(GameplayHandler.Difficulty.Hard));
+        
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    private void Start()
+    {
+        AudioController.Instance.StopMainMusic();
     }
 
     public void OnModeSelected(GameplayHandler.Difficulty difficulty)
